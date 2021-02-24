@@ -29,8 +29,23 @@ function home(req, h) {
     });
 }
 
+function notFound(req, h) {
+    return h.view('404', {}, { layout: 'error-layout' }).code(404)
+}
+
+function failNotFound(req, h) {
+    const response = req.response
+    if (response.isBoom && response.output.statusCode === 404) {
+        return h.view('404', {}, { layout: 'error-layout' }).code(404)
+    }
+
+    return h.continue
+}
+
 module.exports = {
     login,
     register,
-    home
+    home,
+    notFound,
+    failNotFound,
 }

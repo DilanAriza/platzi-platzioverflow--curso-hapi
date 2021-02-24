@@ -13,20 +13,9 @@ module.exports = [
     //Render home
     {
         method: 'GET',
-        path: '/{param*}',
-        handler: {
-            directory: {
-                path: '.',
-                index: ['index.html']
-            }
-        }
-    },
-    {
-        method: 'GET',
         path: '/',
         handler: site.home
     },
-
 
     // Register
     {
@@ -65,7 +54,7 @@ module.exports = [
                     email: Joi.string().email().required(),
                     password: Joi.string().required().min(3)
                 }),
-                failAction: users.failValidation
+                failAction: user.failValidation
             }
         },
         handler: user.validateUser
@@ -76,6 +65,26 @@ module.exports = [
         method: 'GET',
         path: '/logout',
         handler: user.logout
+    },
+
+
+    //Rendering 
+    {
+        method: 'GET',
+        path: '/assets/{param*}',
+        handler: {
+            directory: {
+                path: '.',
+                index: ['index.html']
+            }
+        }
+    },
+
+    //Error
+    {
+        method: ['GET', 'POST'],
+        path: '/{any*}',
+        handler: site.notFound
     },
 
 ]

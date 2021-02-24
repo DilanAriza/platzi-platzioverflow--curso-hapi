@@ -15,6 +15,9 @@ const Path = require('path');
 //rutas
 const routes = require('./routes/routes');
 
+//controlador
+const site = require('./controllers/site');
+
 // Configurar el servidor de nuestra aplicación. En un contenedor (Docker) si marca error colocar 0.0.0.0 (todos)
 const server = Hapi.server({
     port: process.env.PORT || 3000,
@@ -49,6 +52,7 @@ async function init() {
             layoutPath: 'views'
         })
 
+        server.ext('onPreResponse', site.failNotFound)
         server.route(routes);
 
         await server.start();
