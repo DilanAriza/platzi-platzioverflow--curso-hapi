@@ -1,5 +1,12 @@
 'use strict'
 
+function home(req, h) {
+    return h.view('index', {
+        title: 'home',
+        user: req.state.user
+    });
+}
+
 function register(req, h) {
     if (req.state.user) {
         return h.redirect('/');
@@ -22,9 +29,13 @@ function login(req, h) {
     });
 }
 
-function home(req, h) {
-    return h.view('index', {
-        title: 'home',
+function ask(req, h) {
+    if (!req.state.user) {
+        return h.redirect('/login');
+    }
+
+    return h.view('ask', {
+        title: 'Crear pregunta',
         user: req.state.user
     });
 }
@@ -48,4 +59,5 @@ module.exports = {
     home,
     notFound,
     failNotFound,
+    ask,
 }

@@ -56,7 +56,8 @@ async function logout(req, h) {
 function failValidation(req, h, err) {
     const templates = {
         '/create-user': 'register',
-        '/validate-user': 'login'
+        '/validate-user': 'login',
+        '/create-question': 'ask'
     };
     console.log(req.path)
     return h.view(templates[req.path], {
@@ -64,6 +65,7 @@ function failValidation(req, h, err) {
         error: 'Por favor, complete los campos requeridos'
     }).code(404).takeover()
 }
+
 module.exports = {
     createUser,
     validateUser,
