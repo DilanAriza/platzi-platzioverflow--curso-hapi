@@ -27,6 +27,27 @@ class Users {
 
         return hashPassword;
     }
+
+    async validateUser(data) {
+
+        const user = {
+            ...data
+        }
+
+        const userQuery = await this.connection.orderByChild("email").equalTo(user.email).once("value");
+        const userFound = userQuery.val();
+
+        if (userFound) {
+            const userId = Object.keys(userFound)[0];
+            const passworddRight = await Bcrypt.compare(user.password, userFound[userId].password);
+            const result = (passworddRight) ? userFound[userId] : false;
+
+            return result
+        }
+
+        return false
+
+    }
 }
 
 module.exports = Users
