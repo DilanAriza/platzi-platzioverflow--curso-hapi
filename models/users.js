@@ -6,7 +6,7 @@ class Users {
     constructor(db) {
         this.db = db;
         this.ref = this.db.ref('/');
-        this.connection = this.ref.child('users');
+        this.collection = this.ref.child('users');
     }
 
     async create(data) {
@@ -17,7 +17,7 @@ class Users {
 
         user.password = await this.constructor.encrypt(user.password);
 
-        const newUser = this.connection.push(user);
+        const newUser = this.collection.push(user);
         return newUser.key;
     }
 
@@ -34,7 +34,7 @@ class Users {
             ...data
         }
 
-        const userQuery = await this.connection.orderByChild("email").equalTo(user.email).once("value");
+        const userQuery = await this.collection.orderByChild("email").equalTo(user.email).once("value");
         const userFound = userQuery.val();
 
         if (userFound) {
