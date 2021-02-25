@@ -91,6 +91,13 @@ module.exports = [
         handler: questions.createQuestion
     },
 
+    //Question
+    {
+        method: 'GET',
+        path: '/question/{id}',
+        handler: site.viewQuestion
+    },
+
     //Rendering 
     {
         method: 'GET',
