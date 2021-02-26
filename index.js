@@ -40,6 +40,7 @@ async function init() {
         await server.register(Vision);
 
         server.method('setAnswerRight', methods.setAnswerRight)
+        server.method('getLast', methods.getLast)
 
         server.state('user', {
             ttl: 100 * 60 * 60 * 24 * 7,
