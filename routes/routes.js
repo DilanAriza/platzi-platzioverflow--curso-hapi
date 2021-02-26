@@ -114,6 +114,13 @@ module.exports = [
         handler: questions.answerQuestion
     },
 
+    //Set Answer Right
+    {
+        method: 'GET',
+        path: '/answer/{questionId}/{answerId}',
+        handler: questions.setAnswerRight
+    },
+
     //Rendering 
     {
         method: 'GET',

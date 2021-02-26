@@ -18,6 +18,9 @@ const routes = require('./routes/routes');
 //controlador
 const site = require('./controllers/site');
 
+//Metodos
+const methods = require('./lib/methods')
+
 // Configurar el servidor de nuestra aplicación. En un contenedor (Docker) si marca error colocar 0.0.0.0 (todos)
 const server = Hapi.server({
     port: process.env.PORT || 3000,
@@ -35,6 +38,8 @@ async function init() {
     try {
         await server.register(Inert);
         await server.register(Vision);
+
+        server.method('setAnswerRight', methods.setAnswerRight)
 
         server.state('user', {
             ttl: 100 * 60 * 60 * 24 * 7,
