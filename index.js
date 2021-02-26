@@ -13,6 +13,10 @@ const Inert = require('@hapi/inert');
 const Path = require('path');
 const good = require('@hapi/good');
 const goodConsole = require('@hapi/good-console');
+const crumb = require('@hapi/crumb')
+const Blankie = require('blankie');
+const Scooter = require('@hapi/scooter');
+const HapiDevErrors = require('hapi-dev-errors')
 
 //rutas
 const routes = require('./routes/routes');
@@ -38,6 +42,8 @@ const server = Hapi.server({
 async function init() {
 
     try {
+
+        //Plugins register
         await server.register(Inert);
         await server.register(Vision);
         await server.register({
@@ -52,6 +58,15 @@ async function init() {
                 }
             }
         })
+        await server.register({
+            plugin: crumb,
+            options: {
+                cookieOptions: {
+                    isSecure: process.env.NODE_ENV === 'prod'
+                }
+            }
+        })
+
 
         await server.register({
             plugin: require('./lib/api'),
@@ -59,7 +74,26 @@ async function init() {
                 prefix: 'api'
             }
         })
+        await server.register([Scooter, {
+            plugin: Blankie,
+            options: {
+                defaultSrc: `'self' 'unsafe-inline' `,
+                styleSrc: `'self' 'unsafe-inline', 'https://maxcdn.bootstrapcdn.com'`,
+                fontSrc: `'self' 'unsafe-inline' data:`,
+                scriptSrc: `'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://maxcdn.bootstrapcdn.com/ https://code.jquery.com/`,
+                generateNonces: false
+            }
+        }])
 
+        await server.register({
+            plugin: HapiDevErrors,
+            options: {
+                showErrors: process.env.NODE_ENV !== 'prod',
+            }
+        })
+
+
+        //Config methods of the server
         server.method('setAnswerRight', methods.setAnswerRight)
         server.method('getLast', methods.getLast, {
             cache: {
