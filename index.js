@@ -11,6 +11,8 @@ const handlerbars = require('./lib/helpers');
 const Vision = require('@hapi/vision');
 const Inert = require('@hapi/inert');
 const Path = require('path');
+const good = require('@hapi/good');
+const goodConsole = require('@hapi/good-console');
 
 //rutas
 const routes = require('./routes/routes');
@@ -38,6 +40,18 @@ async function init() {
     try {
         await server.register(Inert);
         await server.register(Vision);
+        await server.register({
+            plugin: good,
+            options: {
+                reporters: {
+                    console: [{
+                            module: goodConsole
+                        },
+                        'stdout'
+                    ]
+                }
+            }
+        })
 
         server.method('setAnswerRight', methods.setAnswerRight)
         server.method('getLast', methods.getLast, {
@@ -72,16 +86,16 @@ async function init() {
         process.exit(1);
     }
 
-    console.log(`Servidor lanzado en ${server.info.uri}`)
+    server.log('info', `Servidor lanzado en ${server.info.uri}`)
 }
 
 process.on('unhandledRejection', error => {
-    console.error('unhandledRejection', error.message, error)
+    server.log('unhandledRejection', error.message, error)
 })
 
 
 process.on('uncaughtException', error => {
-    console.error('uncaughtException', error.message, error)
+    server.log('uncaughtException', error.message, error)
 })
 
 init();

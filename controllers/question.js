@@ -25,9 +25,9 @@ async function createQuestion(req, h) {
         }
 
         result = await questions.create(req.payload, req.state.user, filename);
-        console.log(`Pregunta creadad con el ID ${result}`);
+        req.log('info', `Pregunta creadad con el ID ${result}`);
     } catch (error) {
-        console.error(`Ocurrio un error: ${error}`);
+        req.log('error', `Ocurrio un error: ${error}`);
 
         return h.view('ask', {
             title: 'Crear pregunta',
@@ -49,9 +49,9 @@ async function answerQuestion(req, h) {
     try {
         result = await questions.answer(req.payload, req.state.user);
 
-        console.log(`Respuesta creada: ${result}`)
+        req.log('info', `Respuesta creada: ${result}`)
     } catch (error) {
-        console.error(error)
+        req.log(error)
     }
 
     return h.redirect(`/question/${req.payload.id}`);
@@ -67,9 +67,9 @@ async function setAnswerRight(req, h) {
     let result;
     try {
         result = await req.server.methods.setAnswerRight(req.params.questionId, req.params.answerId, req.state.user);
-        console.log(result)
+        req.log('info', result);
     } catch (error) {
-        console.error(error)
+        req.log(error)
     }
 
     return h.redirect(`/question/${req.params.questionId}`)
