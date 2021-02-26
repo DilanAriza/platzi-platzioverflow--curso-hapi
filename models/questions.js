@@ -33,6 +33,26 @@ class Questions {
 
         return data;
     }
+
+    async answer(data, user) {
+
+        const content = {
+            ...data
+        }
+        const pushData = {
+            text: content.answer,
+            user: user
+        }
+
+        console.log(pushData)
+
+        const answers = await this.collection.child(data.id).child('answers').push({
+            text: content.answer,
+            user: user
+        });
+
+        return answers;
+    }
 }
 
 module.exports = Questions;

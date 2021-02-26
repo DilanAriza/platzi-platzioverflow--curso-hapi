@@ -7,7 +7,7 @@
 
 // Requerir el modulo de hapi (Framework) y otras librerias
 const Hapi = require('@hapi/hapi');
-const Handlebars = require('handlebars');
+const handlerbars = require('./lib/helpers');
 const Vision = require('@hapi/vision');
 const Inert = require('@hapi/inert');
 const Path = require('path');
@@ -44,7 +44,7 @@ async function init() {
 
         server.views({
             engines: {
-                hbs: Handlebars
+                hbs: handlerbars
             },
             relativeTo: __dirname,
             path: 'views',

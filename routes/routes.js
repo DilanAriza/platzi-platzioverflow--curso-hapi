@@ -98,6 +98,22 @@ module.exports = [
         handler: site.viewQuestion
     },
 
+    //Answer question
+    {
+        path: '/answer-question',
+        method: 'POST',
+        options: {
+            validate: {
+                payload: Joi.object({
+                    answer: Joi.string().required(),
+                    id: Joi.string().required()
+                }),
+                failAction: user.failValidation
+            }
+        },
+        handler: questions.answerQuestion
+    },
+
     //Rendering 
     {
         method: 'GET',
